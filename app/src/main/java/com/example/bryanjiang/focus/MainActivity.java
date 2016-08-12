@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    //Just a comment to check for github's functionality
     private final int EDITOR_REQUEST_CODE = 1001;
     private CursorAdapter cursorAdapter;
 
