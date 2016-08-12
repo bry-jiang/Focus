@@ -9,7 +9,7 @@ import android.net.Uri;
 
 public class NotesProvider extends ContentProvider{
 
-    private static final String AUTHORITY = "com.example.focus.notesprovider";
+    private static final String AUTHORITY = "com.example.bryanjiang.focus.notesprovider";
     private static final String BASE_PATH = "notes";
     public static final Uri CONTENT_URI =
             Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH );
