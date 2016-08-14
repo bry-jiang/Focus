@@ -15,13 +15,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditorActivity"></activity>
+        <activity android:name=".EditorActivity" />
+
         <provider
             android:name=".NotesProvider"
             android:authorities="com.example.bryanjiang.focus.notesprovider"
-            android:exported="true">
+            android:exported="true"></provider>
 
-        </provider>
+        <activity android:name=".Tags"></activity>
     </application>
 
 </manifest>

@@ -10,9 +10,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private final int EDITOR_REQUEST_CODE = 1001;
     private CursorAdapter cursorAdapter;
+
+    int[] TodayFilled = {0, 0, 0};
+    int TodayRowSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,10 +133,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
     }
 
-    public void firstButton(View view) {
-        Toast.makeText(MainActivity.this, "It works :)", Toast.LENGTH_SHORT).show();
-    }
-
     private void insertNote(String noteText) {
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.NOTE_TEXT, noteText);
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 values);
         Log.d("MainActivity", "Inserted note " + noteUri.getLastPathSegment());
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -200,26 +198,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         restartLoader();
     }
 
-    private void restartLoader() {
-        getLoaderManager().restartLoader(0, null, this);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this, NotesProvider.CONTENT_URI,
-                null, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        cursorAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        cursorAdapter.swapCursor(null);
-    }
-
     public void openEditorForNewNote(View view) {
         Intent intent = new Intent(this, EditorActivity.class);
         startActivityForResult(intent, EDITOR_REQUEST_CODE);
@@ -232,5 +210,93 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             restartLoader();
         }
     }
+    public void addToToday(View view) {
+        switch(TodayRowSelected) {
+            case 0 :
+                Toast.makeText(MainActivity.this, "You cannot pick more than 3 tasks per day :)", Toast.LENGTH_SHORT);
+                break;
+            case 1:
+                TextView textView1 = (TextView) findViewById(R.id.PlaceHolder1);
+                textView1.setText("Just a test");
+                break;
+            case 2:
+                TextView textView2 = (TextView) findViewById(R.id.PlaceHolder2);
+                textView2.setText("Just a test");
+                break;
+            case 3:
+                TextView textView3= (TextView) findViewById(R.id.PlaceHolder3);
+                textView3.setText("Just a test");
+                break;
+        }
+    }
+    public void setEmpty (View view) {
+        TodayFilled[0] = 0;
+        TodayEmptyFragment todayEmptyFragment = new TodayEmptyFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.today_container1, todayEmptyFragment).commit();
 
+    }
+    public void setEmpty2 (View view) {
+        TodayFilled[1] = 0;
+        TodayEmptyFragment todayEmptyFragment = new TodayEmptyFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.today_container2, todayEmptyFragment).commit();
+    }
+    public void setEmpty3 (View view) {
+        TodayFilled[2] = 0;
+        TodayEmptyFragment todayEmptyFragment = new TodayEmptyFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.today_container3, todayEmptyFragment).commit();
+    }
+    public void setToday1 (View view) {
+        TodayFilled[0] = 1;
+        TodayRowSelected = 1;
+        goToMaster(view);
+
+//        TodayItemFragment todayItemFragment = new TodayItemFragment();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.today_container1, todayItemFragment).commit();
+
+    }
+    public void setToday2 (View view) {
+        TodayFilled[1] = 1;
+        TodayRowSelected = 2;
+        TodayItem2Fragment todayItem2Fragment = new TodayItem2Fragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.today_container2, todayItem2Fragment).commit();
+    }
+    public void setToday3 (View view) {
+        TodayFilled[2] = 1;
+        TodayRowSelected = 3;
+        TodayItem3Fragment todayItem3Fragment = new TodayItem3Fragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.today_container3, todayItem3Fragment).commit();
+    }
+    public void goToMaster (View view) {
+        MasterListFragment masterListFragment = new MasterListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_id, masterListFragment).commit();
+    }
+    public void resetTodayPointer () {
+        if (TodayFilled[0] == 0) {
+            TodayRowSelected = 1;
+        } else if (TodayFilled[1] == 0) {
+            TodayRowSelected = 2;
+        } else if (TodayFilled[3] == 0) {
+            TodayRowSelected = 3;
+        } else {
+            TodayRowSelected = 0;
+        }
+    }
+
+    //Loader methods
+    private void restartLoader() {
+        getLoaderManager().restartLoader(0, null, this);
+    }
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, NotesProvider.CONTENT_URI,
+                null, null, null, null);
+    }
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        cursorAdapter.swapCursor(data);
+    }
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        cursorAdapter.swapCursor(null);
+    }
 }

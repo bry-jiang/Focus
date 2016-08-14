@@ -6,16 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MasterListFragment extends Fragment {
+public class MasterListFragment extends Fragment { //This is just going to be a blank fragment to show the mainactivity underneath
+    //The main activity will act as the masterlist activity instead because it already has the functionality
 
     public MasterListFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         return inflater.inflate(R.layout.fragment_master_list, container, false);
     }
