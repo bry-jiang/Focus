@@ -24,6 +24,7 @@ public class NotesCursorAdapter extends CursorAdapter{
 
         String noteText = cursor.getString(
                 cursor.getColumnIndex(DBOpenHelper.NOTE_TEXT));
+        String noteText2 = cursor.getString(cursor.getColumnIndex(DBOpenHelper.USED_TODAY));
 
         int pos = noteText.indexOf(10);
         if (pos != -1) {
@@ -32,6 +33,8 @@ public class NotesCursorAdapter extends CursorAdapter{
 
         TextView tv = (TextView) view.findViewById(R.id.tvNote);
         tv.setText(noteText);
+        TextView tv2 = (TextView) view.findViewById(R.id.tvNote2);
+        tv2.setText(noteText2);
 
     }
 }

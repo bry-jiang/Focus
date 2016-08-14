@@ -26,6 +26,18 @@
         android:text="Dummy Text"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp" />
+    <TextView
+        android:id="@+id/tvNote2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="Dummy Text"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:layout_alignBottom="@+id/imageDocIcon"
+        android:layout_toLeftOf="@+id/button5"
+        android:layout_toStartOf="@+id/button5" />
+
 
     <Button
         android:layout_width="wrap_content"

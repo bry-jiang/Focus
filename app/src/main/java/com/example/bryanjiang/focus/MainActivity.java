@@ -37,10 +37,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("MainActivity", "Started ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initBar();
+
+
 
         cursorAdapter = new NotesCursorAdapter(this, null, 0);
 
@@ -59,6 +62,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         getLoaderManager().initLoader(0, null, this);
     }
+
+//    private void initToday() {
+//        long numRows = queryNumEntries(NotesProvider.returnDB,)
+//        for () {
+//            if () {
+//                setToday1();
+//            }
+//            if () {
+//                setToday2();
+//            }
+//            if() {
+//                setToday3();
+//            }
+//        }
+//    }
 
     private void initBar() { // The bottom bar's height is 60dp remember to add 60dp as a bottom padding to all fragments
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
@@ -84,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 // Change colors
         bottomNavigation.setAccentColor(Color.parseColor("#F63D2B"));
         bottomNavigation.setInactiveColor(Color.parseColor("#747474"));
-
 
 // Force to tint the drawable (useful for font with icon for example)
         bottomNavigation.setForceTint(true);
@@ -133,9 +150,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
     }
 
-    private void insertNote(String noteText) {
+    private void insertNote(String noteText, int usedToday) {
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.NOTE_TEXT, noteText);
+        values.put(DBOpenHelper.USED_TODAY, usedToday);
         Uri noteUri = getContentResolver().insert(NotesProvider.CONTENT_URI,
                 values);
         Log.d("MainActivity", "Inserted note " + noteUri.getLastPathSegment());
@@ -192,9 +210,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void insertSampleData() {
-        insertNote("Simple note");
-        insertNote("Multi-line\nnote");
-        insertNote("Very long note with a lot of text that exceeds the width of the screen");
+        insertNote("Simple note", 1);
+        insertNote("Multi-line\nnote", 2);
+        insertNote("Very long note with a lot of text that exceeds the width of the screen", 3);
         restartLoader();
     }
 
@@ -210,10 +228,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             restartLoader();
         }
     }
+
     public void addToToday(View view) {
         switch(TodayRowSelected) {
+
             case 0 :
-                Toast.makeText(MainActivity.this, "You cannot pick more than 3 tasks per day :)", Toast.LENGTH_SHORT);
+                Toast.makeText(MainActivity.this, "You cannot pick more than 3 tasks per day :)", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
                 TextView textView1 = (TextView) findViewById(R.id.PlaceHolder1);
