@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         initBar();
-
-
+        initToday();
 
         cursorAdapter = new NotesCursorAdapter(this, null, 0);
 
@@ -63,20 +62,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getLoaderManager().initLoader(0, null, this);
     }
 
-//    private void initToday() {
-//        long numRows = queryNumEntries(NotesProvider.returnDB,)
-//        for () {
-//            if () {
-//                setToday1();
-//            }
-//            if () {
-//                setToday2();
-//            }
-//            if() {
-//                setToday3();
-//            }
-//        }
-//    }
 
     private void initBar() { // The bottom bar's height is 60dp remember to add 60dp as a bottom padding to all fragments
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
@@ -148,6 +133,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 // Manage the new y position
             }
         });
+    }
+
+    private void initToday() {
+        NotesProvider n = new NotesProvider();
+        n.getProfilesCount();
     }
 
     private void insertNote(String noteText, int usedToday) {
@@ -230,9 +220,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     public void addToToday(View view) {
-        switch(TodayRowSelected) {
+        switch (TodayRowSelected) {
 
-            case 0 :
+            case 0:
                 Toast.makeText(MainActivity.this, "You cannot pick more than 3 tasks per day :)", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
@@ -244,28 +234,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 textView2.setText("Just a test");
                 break;
             case 3:
-                TextView textView3= (TextView) findViewById(R.id.PlaceHolder3);
+                TextView textView3 = (TextView) findViewById(R.id.PlaceHolder3);
                 textView3.setText("Just a test");
                 break;
         }
     }
-    public void setEmpty (View view) {
+
+    public void setEmpty(View view) {
         TodayFilled[0] = 0;
         TodayEmptyFragment todayEmptyFragment = new TodayEmptyFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.today_container1, todayEmptyFragment).commit();
 
     }
-    public void setEmpty2 (View view) {
+
+    public void setEmpty2(View view) {
         TodayFilled[1] = 0;
         TodayEmptyFragment todayEmptyFragment = new TodayEmptyFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.today_container2, todayEmptyFragment).commit();
     }
-    public void setEmpty3 (View view) {
+
+    public void setEmpty3(View view) {
         TodayFilled[2] = 0;
         TodayEmptyFragment todayEmptyFragment = new TodayEmptyFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.today_container3, todayEmptyFragment).commit();
     }
-    public void setToday1 (View view) {
+
+    public void setToday1(View view) {
         TodayFilled[0] = 1;
         TodayRowSelected = 1;
         goToMaster(view);
@@ -274,23 +268,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //        getSupportFragmentManager().beginTransaction().replace(R.id.today_container1, todayItemFragment).commit();
 
     }
-    public void setToday2 (View view) {
+
+    public void setToday2(View view) {
         TodayFilled[1] = 1;
         TodayRowSelected = 2;
         TodayItem2Fragment todayItem2Fragment = new TodayItem2Fragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.today_container2, todayItem2Fragment).commit();
     }
-    public void setToday3 (View view) {
+
+    public void setToday3(View view) {
         TodayFilled[2] = 1;
         TodayRowSelected = 3;
         TodayItem3Fragment todayItem3Fragment = new TodayItem3Fragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.today_container3, todayItem3Fragment).commit();
     }
-    public void goToMaster (View view) {
+
+    public void goToMaster(View view) {
         MasterListFragment masterListFragment = new MasterListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_id, masterListFragment).commit();
     }
-    public void resetTodayPointer () {
+
+    public void resetTodayPointer() {
         if (TodayFilled[0] == 0) {
             TodayRowSelected = 1;
         } else if (TodayFilled[1] == 0) {
@@ -306,15 +304,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void restartLoader() {
         getLoaderManager().restartLoader(0, null, this);
     }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, NotesProvider.CONTENT_URI,
                 null, null, null, null);
     }
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         cursorAdapter.swapCursor(data);
     }
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         cursorAdapter.swapCursor(null);

@@ -21,16 +21,18 @@ public class NotesProvider extends ContentProvider {
 
     public static final String CONTENT_ITEM_TYPE = "Note";
 
+    public static int rowNum;
+
     static {
         uriMatcher.addURI(AUTHORITY, BASE_PATH, NOTES);
         uriMatcher.addURI(AUTHORITY, BASE_PATH + "/#", NOTES_ID);
     }
 
     private SQLiteDatabase database;
+    private DBOpenHelper helper = new DBOpenHelper(getContext());
 
     @Override
     public boolean onCreate() {
-        DBOpenHelper helper = new DBOpenHelper(getContext());
         database = helper.getWritableDatabase();
         return true;
     }
@@ -45,7 +47,6 @@ public class NotesProvider extends ContentProvider {
                 selection, null, null, null,
                 DBOpenHelper.NOTE_CREATED + " DESC");
     }
-
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -66,6 +67,24 @@ public class NotesProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         return null;
+    }
+
+    public void getProfilesCount() {
+
+        //rowNum = 0;
+        //String query = "SELECT * FROM " + DBOpenHelper.TABLE_NOTES;
+
+        //Cursor point to a location in your result
+        //Cursor c = database.query(DBOpenHelper.TABLE_NOTES, DBOpenHelper.ALL_COLUMNS, null, null, null, null, null);
+        Cursor c = helper.getWritableDatabase().rawQuery("SELECT * FROM " + DBOpenHelper.TABLE_NOTES, null);
+        //Move to first row in your result
+        //c.moveToFirst();
+
+//        while (!c.isAfterLast()) {
+//            //rowNum++;
+//            c.moveToNext();
+//        }
+
     }
 
 
